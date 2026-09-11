@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RITUAL.exe — Morning Compliance Interface v4.1</title>
+  <meta name="description" content="RITUAL.exe: Your mandatory, legally required morning onboarding experience. Non-compliance is noted." />
+
+  <!-- Google Fonts: JetBrains Mono for system text -->
+  <link rel="stylesheet" href="/src/ui/theme.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* Inline critical font for Comic Sans fallback */
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
+  </style>
+</head>
+<body>
+  <!-- CRT scanline overlay — always on top, pointer-events none -->
+  <div id="crt-overlay" aria-hidden="true"></div>
+  <!-- Chromatic aberration glitch layer -->
+  <div id="glitch-layer" aria-hidden="true"></div>
+
+  <!-- Main app container — all screens mount here -->
+  <div id="ritual-root"></div>
+
+  <!-- Battery meter (always visible) -->
+  <div id="battery-bar" aria-label="Compliance energy level">
+    <div id="battery-fill"></div>
+    <span id="battery-label">---%</span>
+  </div>
+
+  <!-- Global status ticker -->
+  <div id="status-ticker" aria-live="polite"></div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

@@ -1,0 +1,1263 @@
+/* ============================================================
+   RITUAL.exe — Theme & Dystopian Enterprise UI Design System
+   Strictly adheres to Section 8, 20, 24, 25, 35, 36
+   CRT scanlines, chromatic glitch, Comic Sans / JetBrains Mono
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700;800&family=Nunito:wght@400;700;900&display=swap');
+
+:root {
+  --bg: #07070d;
+  --surface: #10101a;
+  --surface2: #181826;
+  --surface3: #222236;
+  --border: #2c2c44;
+  --border-active: #4a4a70;
+  --accent: #7c4dff;
+  --accent-glow: rgba(124, 77, 255, 0.4);
+  --accent2: #00e5ff;
+  --accent2-glow: rgba(0, 229, 255, 0.35);
+  --success: #00e676;
+  --success-glow: rgba(0, 230, 118, 0.4);
+  --warning: #ffab00;
+  --danger: #ff1744;
+  --danger-glow: rgba(255, 23, 68, 0.4);
+  --text: #f0f0f8;
+  --text-dim: #7a7a9e;
+  --text-mono: #c4c4e0;
+  --font-system: 'JetBrains Mono', monospace;
+  --font-comic: 'Comic Sans MS', 'Nunito', cursive;
+  --bat-pct: 100%;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-system);
+  font-size: 15px;
+  user-select: none;
+}
+
+/* ── Typography & Helpers ───────────────────────────────────── */
+.mono { font-family: var(--font-system); }
+.comic { font-family: var(--font-comic); }
+.text-dim { color: var(--text-dim); }
+.text-accent { color: var(--accent); }
+.text-accent2 { color: var(--accent2); }
+.text-success { color: var(--success); }
+.text-warning { color: var(--warning); }
+.text-danger { color: var(--danger); }
+.font-bold { font-weight: 700; }
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.w-full { width: 100%; }
+.hidden { display: none !important; }
+.justify-center { justify-content: center; }
+
+.mb-4 { margin-bottom: 4px; }
+.mb-8 { margin-bottom: 8px; }
+.mb-12 { margin-bottom: 12px; }
+.mb-16 { margin-bottom: 16px; }
+.mb-20 { margin-bottom: 20px; }
+.mb-24 { margin-bottom: 24px; }
+.mt-4 { margin-top: 4px; }
+.mt-8 { margin-top: 8px; }
+.mt-12 { margin-top: 12px; }
+.mt-16 { margin-top: 16px; }
+.mt-20 { margin-top: 20px; }
+.mt-24 { margin-top: 24px; }
+.pt-16 { padding-top: 16px; }
+
+.title-system {
+  font-family: var(--font-system);
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  font-family: var(--font-comic);
+  font-size: 0.95rem;
+  color: var(--text-dim);
+}
+
+/* ── CRT Scanline & Flickering Overlay ──────────────────────── */
+#crt-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99990;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.18) 2px,
+    rgba(0, 0, 0, 0.18) 4px
+  );
+  animation: crt-flicker 9s infinite;
+}
+
+@keyframes crt-flicker {
+  0%, 94%, 96%, 100% { opacity: 1; }
+  95% { opacity: 0.93; filter: brightness(1.05) contrast(1.02); }
+}
+
+/* ── Chromatic Aberration Glitch Layer ──────────────────────── */
+#glitch-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 99980;
+  pointer-events: none;
+  opacity: 0;
+}
+
+#glitch-layer.active {
+  animation: chromatic-flash 0.14s steps(2, end) forwards;
+}
+
+@keyframes chromatic-flash {
+  0% {
+    opacity: 0.9;
+    background: linear-gradient(90deg, rgba(255, 0, 80, 0.08) 0%, transparent 50%, rgba(0, 229, 255, 0.08) 100%);
+    transform: translateX(-4px) skewX(0.8deg);
+  }
+  50% {
+    opacity: 0.7;
+    background: linear-gradient(90deg, rgba(0, 229, 255, 0.08) 0%, transparent 50%, rgba(255, 0, 80, 0.08) 100%);
+    transform: translateX(4px) skewX(-0.8deg);
+  }
+  100% {
+    opacity: 0;
+    transform: none;
+  }
+}
+
+/* ── Persistent Recording Banner (Section 20) ───────────────── */
+#recording-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 28px;
+  background: rgba(20, 10, 15, 0.92);
+  border-bottom: 1px solid rgba(255, 23, 68, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--font-system);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: #ff8090;
+  z-index: 9000;
+  backdrop-filter: blur(4px);
+}
+
+.rec-dot {
+  color: var(--danger);
+  animation: pulse-red 1.2s infinite ease-in-out;
+  font-size: 0.9rem;
+}
+
+.rec-sub {
+  color: var(--text-dim);
+  font-size: 0.62rem;
+}
+
+@keyframes pulse-red {
+  0%, 100% { opacity: 1; filter: drop-shadow(0 0 6px var(--danger)); }
+  50% { opacity: 0.3; filter: none; }
+}
+
+/* ── Battery Gauge ─────────────────────────────────────────── */
+#battery-bar {
+  position: fixed;
+  top: 36px;
+  right: 18px;
+  z-index: 8900;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-system);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+#battery-fill {
+  width: 36px;
+  height: 15px;
+  border: 1.5px solid var(--text-dim);
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+#battery-fill::after {
+  content: '';
+  position: absolute;
+  right: -3px;
+  top: 3px;
+  bottom: 3px;
+  width: 2px;
+  background: var(--text-dim);
+  border-radius: 0 1px 1px 0;
+}
+
+#battery-fill::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--bat-pct, 100%);
+  background: var(--success);
+  transition: width 0.3s ease;
+}
+
+/* ── Status Ticker ─────────────────────────────────────────── */
+#status-ticker {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  background: rgba(10, 10, 18, 0.95);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  font-family: var(--font-system);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  z-index: 8900;
+}
+
+/* ── Main Layout & Screens ─────────────────────────────────── */
+#ritual-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center center;
+}
+
+#ritual-root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px 36px 16px;
+  overflow-y: auto;
+}
+
+.screen {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 32px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+}
+
+/* ── Buttons ───────────────────────────────────────────────── */
+.btn {
+  font-family: var(--font-system);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 12px 24px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #ffffff;
+  box-shadow: 0 0 16px var(--accent-glow);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #9066ff;
+  box-shadow: 0 0 24px var(--accent-glow);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--surface3);
+  border-color: var(--border-active);
+}
+
+.btn-warning {
+  background: var(--warning);
+  color: #0a0a0f;
+  box-shadow: 0 0 16px rgba(255, 171, 0, 0.4);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px dashed var(--border);
+}
+
+.btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.glow-btn {
+  animation: glow-pulse 1.6s infinite alternate ease-in-out;
+}
+
+@keyframes glow-pulse {
+  from { box-shadow: 0 0 12px var(--accent-glow); }
+  to { box-shadow: 0 0 28px var(--accent2-glow); }
+}
+
+.key-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  font-family: var(--font-system);
+}
+
+.key-pill {
+  background: var(--surface3);
+  border: 1px solid var(--border-active);
+  color: var(--accent2);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 0.72rem;
+}
+
+/* ── Section 9: Terms & Legalese Scroll ─────────────────────── */
+.legalese-scroll {
+  max-height: 140px;
+  overflow-y: auto;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--text-dim);
+  text-align: left;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: var(--font-comic);
+  font-size: 0.88rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.checkbox-row input[type='checkbox'] {
+  margin-top: 3px;
+  accent-color: var(--accent);
+  width: 17px;
+  height: 17px;
+  cursor: pointer;
+}
+
+/* ── Section 10: Soul Virus Threat List ─────────────────────── */
+.soul-scan-box {
+  background: var(--surface2);
+  border: 1px dashed var(--border-active);
+  border-radius: 8px;
+  padding: 14px 18px;
+  text-align: left;
+  animation: fadeIn 0.3s ease;
+}
+
+.soul-threat-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 0.78rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* ── Section 11: Eye Contact Progress Ring ──────────────────── */
+.eye-ring-container {
+  position: relative;
+  width: 210px;
+  height: 210px;
+  margin: 0 auto;
+}
+
+.progress-ring {
+  transform: rotate(-90deg);
+}
+
+.progress-ring__track {
+  fill: transparent;
+  stroke: var(--surface2);
+}
+
+.progress-ring__circle {
+  fill: transparent;
+  stroke: var(--accent2);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.15s linear;
+  filter: drop-shadow(0 0 10px var(--accent2-glow));
+}
+
+.eye-ring-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-system);
+}
+
+.eye-ring-label .elapsed {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.eye-ring-label .total {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+.eye-metrics-box {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  background: var(--surface2);
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+.eye-metric-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.72rem;
+}
+
+.eye-status-banner {
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+}
+
+.eye-status-banner.warning-banner {
+  background: rgba(255, 23, 68, 0.12);
+  border-color: var(--danger);
+  color: var(--danger);
+  animation: shake 0.3s ease;
+}
+
+.eye-status-banner.success-banner {
+  background: rgba(0, 230, 118, 0.12);
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.eye-status-banner.active-banner {
+  color: var(--accent2);
+}
+
+/* ── Section 12 & 13: Vocal Gate & Autocorrect ──────────────── */
+.vocal-phrase-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+}
+
+.vocal-target-text {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.live-transcript-box {
+  background: var(--surface2);
+  border: 1px dashed var(--border-active);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  font-style: italic;
+  min-height: 38px;
+}
+
+.autocorrect-notice {
+  background: rgba(124, 77, 255, 0.1);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  padding: 12px;
+  text-align: left;
+  animation: fadeIn 0.3s ease;
+}
+
+.typed-fallback-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+.input-box {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: var(--font-system);
+  font-size: 0.85rem;
+  padding: 10px;
+  outline: none;
+  resize: none;
+  transition: border-color 0.2s;
+}
+
+.input-box:focus {
+  border-color: var(--accent2);
+}
+
+/* ── Section 14: Fake Ad Break ──────────────────────────────── */
+.ad-break-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 95000;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.ad-card {
+  background: #0d1525;
+  border: 2px solid #204070;
+  border-radius: 12px;
+  padding: 32px 36px;
+  max-width: 520px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(0, 100, 255, 0.2);
+}
+
+.ad-badge {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: #60a5fa;
+  margin-bottom: 12px;
+  font-family: var(--font-system);
+}
+
+.ad-logo {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #ffffff;
+  font-family: var(--font-system);
+}
+
+.ad-sub {
+  font-size: 0.9rem;
+  color: #38bdf8;
+  margin-bottom: 18px;
+  font-family: var(--font-comic);
+}
+
+.ad-graphic {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 12px;
+  height: 80px;
+  margin: 16px 0 24px;
+}
+
+.ad-bar {
+  width: 24px;
+  background: linear-gradient(180deg, #38bdf8, #1e40af);
+  border-radius: 3px 3px 0 0;
+  animation: bar-grow 0.6s ease-out;
+}
+
+.ad-tagline {
+  font-size: 1.1rem;
+  color: #e2e8f0;
+  font-family: var(--font-comic);
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.ad-timer {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+}
+
+/* ── Section 15, 16, 17, 18: Loading Screen & Trust Fall ────── */
+.loading-bar-track {
+  width: 100%;
+  height: 18px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  overflow: hidden;
+  position: relative;
+}
+
+.loading-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  box-shadow: 0 0 12px var(--accent2-glow);
+  transition: width 0.4s ease;
+}
+
+.loading-progress-numbers {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+}
+
+.buzzword-box {
+  background: var(--surface2);
+  border: 1px dashed var(--border-active);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  color: var(--accent2);
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.trust-fall-section {
+  background: rgba(255, 171, 0, 0.08);
+  border: 1px solid var(--warning);
+  border-radius: 8px;
+  padding: 16px;
+  animation: fadeIn 0.4s ease;
+}
+
+.skip-btn-frustrate {
+  font-size: 0.72rem;
+  padding: 6px 14px;
+}
+
+.fun-fact-popup {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: var(--surface3);
+  border: 1px solid var(--border-active);
+  border-radius: 8px;
+  padding: 12px 16px;
+  max-width: 320px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  animation: slideInRight 0.3s ease;
+  z-index: 100;
+  text-align: left;
+}
+
+.fun-fact-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.65rem;
+  color: var(--accent2);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.fun-fact-close {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.fun-fact-body {
+  font-size: 0.82rem;
+  font-family: var(--font-comic);
+  color: var(--text);
+  line-height: 1.4;
+}
+
+/* ── Section 19: Rigged MCQ ─────────────────────────────────── */
+.mcq-question-box {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 20px;
+}
+
+.mcq-options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.mcq-option-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.mcq-option-btn:hover:not(:disabled) {
+  background: var(--surface3);
+  border-color: var(--accent2);
+  transform: translateY(-2px);
+}
+
+.mcq-option-btn.selected {
+  background: rgba(0, 230, 118, 0.15);
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.mcq-badge {
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-family: var(--font-system);
+}
+
+.mcq-feedback-banner {
+  background: rgba(0, 230, 118, 0.1);
+  border: 1px solid var(--success);
+  border-radius: 8px;
+  padding: 16px;
+  animation: fadeIn 0.3s ease;
+}
+
+/* ── Section 21: Scream Meter ───────────────────────────────── */
+.scream-bar-track {
+  width: 100%;
+  height: 28px;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.scream-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00e5ff 0%, #ffab00 65%, #ff1744 100%);
+  transition: width 0.08s linear;
+}
+
+/* ── Section 22 & 23: Letter Catch Arena & Flying Enter ─────── */
+.letter-catch-wrapper {
+  max-width: 820px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.message-assembly-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.letter-slot {
+  width: 44px;
+  height: 52px;
+  background: var(--surface2);
+  border: 2px dashed var(--border);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: transparent;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.letter-slot.caught {
+  background: var(--surface3);
+  border: 2px solid var(--accent2);
+  color: #ffffff;
+  box-shadow: 0 0 16px var(--accent2-glow);
+  transform: scale(1.08);
+}
+
+.letter-slot.space-slot {
+  width: 20px;
+  border: none;
+  background: transparent;
+}
+
+.canvas-container {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #080812;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+.enter-flying-sprite {
+  position: fixed;
+  z-index: 9999;
+  background: linear-gradient(135deg, #ff0055, #7c4dff);
+  border: 3px solid #ffffff;
+  border-radius: 12px;
+  padding: 16px 28px;
+  font-family: var(--font-system);
+  font-size: 1.5rem;
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 0 30px rgba(255, 0, 85, 0.8);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  user-select: none;
+}
+
+.screen-flash-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99998;
+  background: #ffffff;
+  pointer-events: none;
+}
+
+/* ── Section 24: Ghost Coworker Cursor ──────────────────────── */
+#ghost-coworker-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 99995;
+  opacity: 0.65;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.7));
+  transition: opacity 0.2s;
+}
+
+.ghost-cursor-label {
+  position: absolute;
+  top: 18px;
+  left: 14px;
+  background: rgba(20, 20, 36, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  padding: 2px 6px;
+  font-size: 9px;
+  color: #a0a0c0;
+  white-space: nowrap;
+}
+
+/* ── Section 25: Idle Guilt Trip ────────────────────────────── */
+#idle-guilt-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99997;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.4s ease;
+}
+
+.idle-guilt-box {
+  background: var(--surface);
+  border: 1px solid var(--warning);
+  border-radius: 12px;
+  padding: 32px 40px;
+  max-width: 500px;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(255, 171, 0, 0.25);
+}
+
+/* ── Section 26: Bot Reply ──────────────────────────────────── */
+.bot-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.bot-avatar {
+  font-size: 2.5rem;
+}
+
+.bot-chat-bubble {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 24px;
+  position: relative;
+}
+
+.typewriter-cursor {
+  color: var(--accent2);
+  animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ── Section 27: Victory ────────────────────────────────────── */
+.victory-card {
+  box-shadow: 0 0 60px rgba(0, 230, 118, 0.2);
+  border-color: var(--success);
+}
+
+.trophy-burst {
+  font-size: 4rem;
+  animation: bounce 0.8s infinite alternate ease-in-out;
+}
+
+.victory-title {
+  font-size: 2.2rem;
+  letter-spacing: 0.15em;
+}
+
+.victory-sub {
+  font-size: 1.15rem;
+  color: var(--text-dim);
+}
+
+.victory-rank-box {
+  background: var(--surface2);
+  border: 1px dashed var(--success);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.rank-badge {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--success);
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 20px var(--success-glow);
+}
+
+.victory-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.stat-pill {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 10px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.75rem;
+}
+
+.confetti-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99991;
+}
+
+/* ── Section 30 & 31: Thermal Receipt & Motivational Poster ─── */
+.receipt-screen-layout {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  justify-content: center;
+  max-width: 960px;
+  width: 100%;
+}
+
+.receipt-paper {
+  background: #f4efe6;
+  color: #1a1a1a;
+  padding: 24px 20px;
+  width: 340px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.8rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+  border-radius: 2px;
+  position: relative;
+}
+
+.receipt-paper::before, .receipt-paper::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background-size: 12px 6px;
+}
+
+.receipt-paper::before {
+  top: -6px;
+  background-image: radial-gradient(circle at 6px 6px, transparent 6px, #f4efe6 7px);
+}
+
+.receipt-paper::after {
+  bottom: -6px;
+  background-image: radial-gradient(circle at 6px 0, transparent 6px, #f4efe6 7px);
+}
+
+.receipt-header {
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.receipt-meta {
+  font-size: 0.7rem;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.receipt-divider {
+  text-align: center;
+  margin: 6px 0;
+  letter-spacing: -1px;
+}
+
+.receipt-items {
+  line-height: 1.7;
+}
+
+.receipt-total {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.receipt-payment {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 0.75rem;
+}
+
+.receipt-barcode-box {
+  text-align: center;
+}
+
+.barcode-lines {
+  height: 38px;
+  background: repeating-linear-gradient(
+    90deg,
+    #000000,
+    #000000 2px,
+    transparent 2px,
+    transparent 4px,
+    #000000 4px,
+    #000000 7px,
+    transparent 7px,
+    transparent 9px
+  );
+  margin-bottom: 4px;
+}
+
+.receipt-footer {
+  text-align: center;
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+.poster-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.poster-canvas {
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+  max-width: 100%;
+  height: auto;
+}
+
+/* ── Section 41: Confirmation Modal ─────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99996;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.25s ease;
+}
+
+.modal-card {
+  background: var(--surface);
+  border: 1px solid var(--border-active);
+  border-radius: 12px;
+  padding: 32px 36px;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8);
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* ── Section 49: Completed ASCII Dashboard ──────────────────── */
+.ascii-banner {
+  font-size: 0.85rem;
+  line-height: 1.2;
+  letter-spacing: 0.05em;
+  display: inline-block;
+  text-shadow: 0 0 12px var(--success-glow);
+}
+
+.completed-meta-grid {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+}
+
+.global-counter-box {
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px dashed var(--accent2);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.completed-btn-row {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ── Animations ─────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes bounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-8px); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+.shake-btn, .shake-input {
+  animation: shake 0.3s ease;
+}
+
+/* ── Responsive adjustments ─────────────────────────────────── */
+@media (max-width: 768px) {
+  .receipt-screen-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+  .receipt-paper {
+    width: 100%;
+    max-width: 340px;
+  }
+  .mcq-options-grid {
+    grid-template-columns: 1fr;
+  }
+  .eye-metrics-box, .victory-stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
